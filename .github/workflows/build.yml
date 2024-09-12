@@ -1,0 +1,26 @@
+name: Build cdrdao-pled
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Run cdrdao-pled build script
+        run: ./build
+
+      - name: Get release name from .zip file
+        id: release
+        run: echo "release=$(basename $(ls cdrdao-*.zip .))" >> $GITHUB_ENV
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.release }}
+          path: |
+            ${{ env.release }}

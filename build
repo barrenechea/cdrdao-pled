@@ -1,6 +1,5 @@
 #!/bin/bash
 
-program=cdrdao
 arch=$(uname -m)
 
 # When this script exits, automatically delete the temp directory.
@@ -22,8 +21,11 @@ trap err ERR
 
 set -e
 cd "$(dirname "$0")"
-version=$(cd cdrdao; git rev-parse --short HEAD)-pled-1.0.5-linux
-release=$program-$version-$arch
+
+cdrdao_version=$(cd cdrdao; git rev-parse --short HEAD)
+pled_version=$(cd pled; git describe --tags --abbrev=0)
+
+release=cdrdao-${cdrdao_version}-pled-${pled_version}-linux-$arch
 
 rm -rf $release $release.zip
 
